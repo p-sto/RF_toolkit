@@ -81,6 +81,9 @@ class FrequencySpan:
     def middle(self) -> float:
         return (self.start + self.start) / 2
 
+    def __str__(self) -> str:
+        return '<Freq Span> Start: {}, Stop: {}'.format(self.start, self.stop)
+
 
 @dataclass
 class LTEBand:
@@ -89,17 +92,10 @@ class LTEBand:
     uplink: Optional[FrequencySpan]
 
     def __str__(self) -> str:
-        if not self.uplink:
-            return '<Band {}>: downlink only: [{}-{}] MHz'.format(
-                self.band_id,
-                self.downlink.start, self.downlink.stop
-            )
-        else:
-            return '<Band {}>: uplink [{}-{}] MHz, downlink: [{}-{}] MHz'.format(
-                self.band_id,
-                self.uplink.start, self.uplink.stop,
-                self.downlink.start, self.downlink.stop
-            )
+        _s = '<Band {}> downlink: [{}-{}] Mhz'.format(self.band_id, self.downlink.start, self.downlink.start)
+        if self.uplink:
+            _s += ', uplink: [{}-{}] Mhz'.format(self.downlink.start, self.downlink.stop)
+        return _s
 
 
 def get_lte_band(band_number: str | int) -> LTEBand:
